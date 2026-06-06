@@ -1,79 +1,46 @@
+// Arquivo: gerador
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h> // bibilioteca para gerar numeros aleatorios
+#include <time.h>
+#include "cubo.h"
 
-
-// deixar fora da main, para ler o arquivo, rotacionar, checar se está resolvido
-
-// definição
-enum Cores { AMARELO, VERDE, VERMELHO, LARANJA, BRANCO, AZUL };
-enum Rotacao { NORTE, SUL, LESTE, OESTE };
-enum Direcao { HORARIO, ANTIHORARIO };
-enum Face { CIMA, BAIXO, ESQUERDA, DIREITA, FRENTE, TRAS };
-
-// 6 faces, cada uma com 3 linhas e 3 colunas de adesivos
-int faces[6][3][3];
-
-int main(){
-    
-int n, i, f, linha, coluna, cor_sorteada;
-
-    char nome_arquivo[100];
-    
-    // U = Up (Cima), D = Down (Baixo), L = Left (Esq.), R = Right (Dir.), F = Front (Frente), B = Back (Atrás)
-    char nomes_faces[6] = {'U', 'D', 'L', 'R', 'F', 'B'};
-    
-    // Y = Yellow (Amarelo), G = Green (Verde), R = Red (Vermelho), O = Orange (Laranja), W = White (Branco), B = Blue (Azul)
-    char letras_cores[6] = {'Y', 'G', 'R', 'O', 'W', 'B'};
-
-    // inicializa gerador de números aleatórios usando o relógio do pc (stdlib.h e time.h)
-    srand(time(NULL));
-
-
-    // 1. Pergunta ao usuário quantos arquivos gerar 
-    printf("Quantos arquivos de cubos embaralhados voce quer gerar (N)?");
-     scanf("%d", &n);
-
-    // 2. Laço principal para criar os N arquivos
-    for (i = 1; i <= n; i++) {
-        
-        // sprintf escreve o titulo dos arq, (ex: cubo_1.txt, cubo_2.txt)
-        sprintf(nome_arquivo, "cubo_%d.txt", i);
-
-        // abre o arquivo para escrita ("w" = write)
-         FILE *arquivo = fopen(nome_arquivo, "w");
-
-        // se abriu corretamente
-        if (arquivo == NULL) {
-            printf("Erro ao criar o arquivo %s!\n", nome_arquivo);
-        } else {
-            
-            // fprint escreve no inicio do arquivo cubo tal...
-            fprintf(arquivo, "# Cubo aleatorio %d\n", i);
-            
-            
-            // 3. Preenche as 6 faces do cubo no arquivo
-            for (f = 0; f < 6; f++) {
-                // escreve a letra da face (U, D, L...)
-                fprintf(arquivo, "%c\n", nomes_faces[f]); // printa a face com base no vet[f]
-                
-                // preenche as 3 linhas e 3 colunas de cores
-                for (linha = 0; linha < 3; linha++) {
-                    for (coluna = 0; coluna < 3; coluna++) {
-                        cor_sorteada = rand() % 6; // rand da um número aleatorio e o resto dessa divisão por 6 SEMPRE será 0, 1, 2, 3, 4, 5
-                        fprintf(arquivo, "%c", letras_cores[cor_sorteada]); // imprime na linha e coluna uma cor do vet de cores com base no rand de 0 a 5 
-                    }
-                    
-                    // quebra a linha para continuar a próxima fileira de adesivos da mesma face
-                    fprintf(arquivo, "\n");
-                }
-
-            
-            
-            
-            
-            printf("Arquivo %s gerado com sucesso.\n", nome_arquivo);
-            fclose(arquivo);
-        }
-      }
+int main(int argc, char** argv) {
+    if (argc != 3) {
+        printf("Uso: ./gerador <qtd_movimentos> <nome_do_arquivo.txt>\n");
+        return 1;
     }
+
+    int movimentos = atoi(argv[1]);
+    char* nome_arquivo = argv[2];
+    
+    srand(time(NULL));
+    inicializa_cubo_resolvido();
+
+    // Embaralha usando a CUBINHO
+    for (int i = 0; i < movimentos; i++) {
+        int face = rand() % 6;
+        int dir = rand() % 2;
+        rotacao(face, dir);
+    }
+
+    FILE *arquivo = fopen(nome_arquivo, "w");
+    if (arquivo == NULL) {
+        printf("Erro ao criar arquivo.\n");
+        return 1;
+    }
+
+    fprintf(arquivo, "# Cubo embaralhado com %d movimentos\n", movimentos);
+    for (int f = 0; f < 6; f++) {
+        fprintf(arquivo, "%c\n", nome_faces[f][0]); 
+        for (int l = 0; l < 3; l++) {
+            for (int c = 0; c < 3; c++) {
+                fprintf(arquivo, "%c", letras_cores[cubo[f][l][c]]); 
+            }
+            fprintf(arquivo, "\n");
+        }
+    }
+    
+    fclose(arquivo);
+    printf("Arquivo '%s' gerado!\n", nome_arquivo);
+    return 0;
+}

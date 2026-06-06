@@ -1,111 +1,98 @@
+// Arquivo: SOLUÇÃO CUBO
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include "verifica_cubo.h" 
+#include "cubo.h"
 
-// --- DEFINIÇÕES ---
-enum Cores { AMARELO, VERDE, VERMELHO, LARANJA, BRANCO, AZUL };
-enum Rotacao { NORTE, SUL, LESTE, OESTE };
-enum Direcao { HORARIO, ANTIHORARIO };
-enum Face { CIMA, BAIXO, ESQUERDA, DIREITA, FRENTE, TRAS };
+// Leitor do arquivo de texto
+int carregar_cubo(const char* nome_arquivo) {
+    FILE *arquivo = fopen(nome_arquivo, "r");
+    if (arquivo == NULL) return 0;
 
-// Matriz global do cubo
-int faces[6][3][3]; 
+    char buffer[100];
+    fgets(buffer, sizeof(buffer), arquivo); 
 
-// Strings para os passos
-const char* movimentos[] = {
-    "CIMA_HORARIO", "CIMA_ANTI_HORARIO",
-    "BAIXO_HORARIO", "BAIXO_ANTI_HORARIO",
-    "ESQUERDA_HORARIO", "ESQUERDA_ANTI_HORARIO",
-    "DIREITA_HORARIO", "DIREITA_ANTI_HORARIO"
-};
+    for (int f = 0; f < 6; f++) {
+        char letra_face;
+        fscanf(arquivo, " %c", &letra_face); 
 
-// --- FUNÇÕES DE ROTAÇÃO ---
-// Esta função deve aplicar as regras de girar a face e as faixas vizinhas 
-void aplicar_movimento(int mov) {
-    // Exemplo de algoritmo:
-    // if (mov == 0) { /* Gira face CIMA no sentido HORARIO e move suas faixas adjacentes */ }
-    // if (mov == 1) { /* Gira face CIMA no sentido ANTIHORARIO e move suas faixas adjacentes */ }
-}
-
-// --- VERIFICAÇÃO SE O CUBO FOI RESOLVIDO ---
-int cubo_esta_resolvido() {
-    for (int face = 0; face < 6; face++) {
-        int cor_centro = faces[face][1][1]; // O centro fixo determina a cor da face
         for (int l = 0; l < 3; l++) {
             for (int c = 0; c < 3; c++) {
-                if (faces[face][l][c] != cor_centro) {
-                    return 0; // Se um adesivo for diferente do centro, não está resolvido
+                char letra_cor;
+                fscanf(arquivo, " %c", &letra_cor);
+                for(int i=0; i<6; i++) {
+                    if (letra_cor == letras_cores[i]) {
+                        cubo[f][l][c] = i;
+                        break;
+                    }
                 }
             }
         }
     }
-    return 1; 
+    fclose(arquivo);
+    return 1;
 }
 
-// --- SOLUÇÃO POR BACKTRACKING ---
-int resolve(int qtd_atual, int limite, int* passos) {
-    if (cubo_esta_resolvido()) {
-        return 1; 
-    }
-    if (qtd_atual >= limite) {
-        return 0; 
-    }
+// Algoritmo de Backtracking
+int resolve(int qtd_atual, int limite, int* passos_face, int* passos_direcao) {
+    if (cubo_esta_resolvido()) return 1; 
+    if (qtd_atual >= limite) return 0; 
 
-    // Varre os 8 movimentos básicos da nossa lista de teste
-    for (int mov = 0; mov < 8; mov++) {
-        
-        aplicar_movimento(mov);   // Faz a rotação nas faixas e na face
-        passos[qtd_atual] = mov;  // Registra movimentações
-        
-        // Tenta o próximo passo recursivamente
-        if (resolve(qtd_atual + 1, limite, passos)) {
-            return 1; 
+    for (int f = 0; f < 6; f++) {
+        for (int d = 0; d < 2; d++) {
+            rotacao(f, d); 
+            passos_face[qtd_atual] = f;
+            passos_direcao[qtd_atual] = d;
+            
+            if (resolve(qtd_atual + 1, limite, passos_face, passos_direcao)) {
+                return 1; 
+            }
+            
+            // Backtracking
+            int direcao_oposta = (d == HORARIO) ? ANTIHORARIO : HORARIO;
+            rotacao(f, direcao_oposta); 
         }
-        
-        // BACKTRACK: Se deu errado, desfaz o movimento aplicando o inverso
-        int movimento_oposto = (mov % 2 == 0) ? (mov + 1) : (mov - 1);
-        aplicar_movimento(movimento_oposto); 
     }
-
-    return 0; 
+    return 0;
 }
 
-// Função para exibir a solução na tela
-void imprime_passos(int* passos, int total) {
-    printf("\nSequência de movimentos para resolver:\n");
-    for (int i = 0; i < total; i++) {
-        printf("  Passo %d: %s\n", i + 1, movimentos[passos[i]]);
-    }
-}
-
-// --- FUNÇÃO PRINCIPAL MAIN ---
-int main(int argc, char ** argv) {
-    
-    // Lê a partir do arquivo e converte para a estrutura de dados
-    if (!verifica_cubo()) {
-        printf("Execução interrompida: Falha na validação do arquivo.\n");
-        return 1; 
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        printf("Uso: ./solucao_cubo <arquivo_do_cubo.txt>\n");
+        return 1;
     }
 
-    // Produz a sequência de movimentos que resolve a instância
-    int passos[20]; 
+    if (!carregar_cubo(argv[1])) {
+        printf("Erro ao ler o arquivo %s\n", argv[1]);
+        return 1;
+    }
+
+    int seq_face[20], seq_dir[20];
+    int limite = 6; 
     int resolvido = 0;
+    int total_passos = 0;
 
-    printf("Buscando solução para o cubo carregado...\n");
-
-    // Testa soluções curtas de 1 até 6 movimentos
-    for (int limite_movimentos = 1; limite_movimentos <= 6; limite_movimentos++) {
-        if (resolve(0, limite_movimentos, passos)) {
-            printf("\n🎉 SUCESSO! Instância resolvida com %d movimentos.\n", limite_movimentos);
-            imprime_passos(passos, limite_movimentos);
+    printf("Calculando...\n");
+    for (int i = 1; i <= limite; i++) {
+        if (resolve(0, i, seq_face, seq_dir)) {
+            total_passos = i;
             resolvido = 1;
             break;
         }
     }
 
     if (!resolvido) {
-        printf("\nNão foi possível resolver o cubo dentro do limite de movimentos de teste.\n");
+        printf("Nao foi possivel resolver em ate %d movimentos.\n", limite);
+        return 1;
+    }
+
+    printf("Solucao encontrada em %d passos:\n", total_passos);
+    
+    carregar_cubo(argv[1]); 
+
+    for (int p = 0; p < total_passos; p++) {
+        printf("\nPasso %d: Gire %s no sentido %s\n", p+1, nome_faces[seq_face[p]], nome_direcoes[seq_dir[p]]);
+        rotacao(seq_face[p], seq_dir[p]);
+        imprime_cubo();
     }
 
     return 0;
