@@ -12,9 +12,16 @@ instruções para execução do projeto
 
 gerador.c
 
-dei umas alternadas p main ficar somente no cubo.c e tipo botei p criar somente .txt antes era gerar 
-cores aleatorias mas agora pega um cubo 100% resolvido e aplica os giros aleatorios com o cubinho.c
+O objetivo dele é inicializar um cubo resolvido, aplicar uma quantidade N de movimentos aleatórios
+e salvar esse estado bagunçado em um arquivo de texto. 
+Serve para gerar os casos de teste que o cubo.c vai tentar resolver depois.
 
+
+cubo.h
+
+Não executa nada, mas define as estruturas de dados (como os enum
+para Cores, Faces e Direções) e declara as variáveis globais (a matriz 3D do cubo) e as assinaturas das funções.
+Ele permite que os diferentes arquivos .c "conversem" entre si sabendo quais funções existem sem precisarem conhecer o código interno uns dos outros.
 
 
 
