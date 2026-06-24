@@ -1,14 +1,10 @@
 // ARQ PEDIDO PELO PROFESSOR ESPEFICICAND AS INSTRUÇÕES / EXPLICAÇÃO DO TRABALHO
 
 
-
 instruções para execução do projeto
 
 
-
-
-
-//
+// 
 
 gerador.c
 
@@ -24,7 +20,35 @@ para Cores, Faces e Direções) e declara as variáveis globais (a matriz 3D do 
 Ele permite que os diferentes arquivos .c "conversem" entre si sabendo quais funções existem sem precisarem conhecer o código interno uns dos outros.
 
 
+cubinho.c
+
+Aqui que reside a matriz de estado do cubo (cubo[6][3][3]) e a lógica bruta. 
+A função mais importante aqui é a rotacao, mapear como as peças mudam de
+posição quando você gira uma face (girando a matriz 3x3 e ajustando as bordas das faces adjacentes).
+
+
+cubo.c
+
+É o executável principal (main) para resolver o cubo.
+Lê o estado de um cubo embaralhado a partir de um arquivo .txt.
+Usa um algoritmo (para resolver a função) e testa combinações de movimentos até encontrar a solução dentro de um limite de passos.
+Após calcular a rota mentalmente, ele chama a interface gráfica para mostrar a animação passo a passo da solução.
+
+
+interf.c
+
+É o "front-end" de terminal do projeto.
+Ele utiliza a biblioteca ncurses (em C/C++ para criar interfaces no terminal)
+para mapear as cores e imprimir as matrizes de forma que pareçam um cubo planificado na tela.
+Ele fica aguardando você apertar uma tecla para avançar cada passo.
+
+
+Makefile
+
+Em vez de você ter que digitar comandos gigantescos no terminal toda vez que alterar um código, o Makefile automatiza isso.
+A regra gerador junta o gerador.c e o cubinho.c. 
+A regra cubo junta o cubo.c, cubinho.c e interf.c, e ainda avisa o compilador para linkar a biblioteca gráfica com o comando -lncurses.  
+O comando make clean serve para apagar os arquivos executáveis antigos e os .txt gerados, limpando o diretório.
 
 //
-
 
