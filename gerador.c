@@ -4,6 +4,8 @@
 #include <time.h>
 #include "cubo.h"
 
+
+// Espera 3 coisas: ./gerador, a quantidade de movimentos e o nome do arquivo
 int main(int argc, char** argv) {
     if (argc != 3) {
         printf("./gerador <qtd_movimentos> <nome_do_arquivo.txt>\n");
@@ -11,8 +13,8 @@ int main(int argc, char** argv) {
     }
 
 
-    int movimentos = atoi(argv[1]);
-    char* nome_arq = argv[2];
+    int movimentos = atoi(argv[1]); //Converte o texto que você digitou no terminal para um número inteiro
+    char* nome_arq = argv[2]; //Guarda o nome do arquivo que será criado
     
     srand(time(NULL));
     inicializa_cubo_resolvido();
