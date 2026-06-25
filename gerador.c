@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
 
     int movimentos = atoi(argv[1]);
-    char* nome_arquivo = argv[2];
+    char* nome_arq = argv[2];
     
     srand(time(NULL));
     inicializa_cubo_resolvido();
@@ -24,9 +24,9 @@ int main(int argc, char** argv) {
         rotacao(face, dir);
     }
 
-    FILE *arquivo = fopen(nome_arquivo, "w");
+    FILE *arquivo = fopen(nome_arq, "w");
     if (arquivo == NULL) {
-        printf("Erro ao criar arquivo.\n");
+        printf("Erro ao criar arquivo\n");
         return 1;
     }
 
@@ -44,6 +44,6 @@ int main(int argc, char** argv) {
 
     
     fclose(arquivo);
-    printf("Arquivo %s gerado\n", nome_arquivo);
+    printf("Arquivo %s gerado\n", nome_arq);
     return 0;
 }
