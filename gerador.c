@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    
+    // Escreve as 6 faces no arquivo
     fprintf(arquivo, "Cubo embaralhado com %d movimentos\n", movimentos);
     for (int f = 0; f < 6; f++) {
         fprintf(arquivo, "%c\n", nome_faces[f][0]); 
