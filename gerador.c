@@ -8,7 +8,7 @@
 // Espera 3 coisas: ./gerador, a quantidade de movimentos e o nome do arquivo
 int main(int argc, char** argv) {
     if (argc != 3) {
-        printf("./gerador <qtd_movimentos> <nome_do_arquivo.txt>\n");
+        printf("./gerador <qtd_movimentos> <nome_arq.txt>\n");
         return 1;
     }
 
