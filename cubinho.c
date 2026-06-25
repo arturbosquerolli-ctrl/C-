@@ -2,13 +2,15 @@
 #include <stdio.h>
 #include "cubo.h"
 
-// Declaração real das variáveis globais
+// Declaração real das variáveis globais / enunciado do trab
 int cubo[6][3][3];
 const char* nome_faces[6] = {"CIMA", "BAIXO", "ESQUERDA", "DIREITA", "FRENTE", "TRAS"};
 const char* nome_direcoes[2] = {"HORARIO", "ANTIHORARIO"};
 const char letras_cores[6] = {'Y', 'G', 'R', 'O', 'W', 'B'};
 
-void inicializa_cubo_resolvido() {
+
+
+void inicializaCuboResolvido() {
     for (int f = 0; f < 6; f++) {
         for (int l = 0; l < 3; l++) {
             for (int c = 0; c < 3; c++) {
@@ -18,7 +20,8 @@ void inicializa_cubo_resolvido() {
     }
 }
 
-int cubo_esta_resolvido() {
+
+int cuboEstaResolvido() {
     for (int f = 0; f < 6; f++) {
         int centro = cubo[f][1][1]; 
         for (int l = 0; l < 3; l++) {
@@ -30,7 +33,8 @@ int cubo_esta_resolvido() {
     return 1;
 }
 
-void imprime_cubo() {
+
+void imprimeCubo() {
     // Função de debug simplificada
     printf("Face CIMA:\n");
     for(int l=0; l<3; l++) {
@@ -40,13 +44,14 @@ void imprime_cubo() {
     printf("\n");
 }
 
+
 // Gira a matriz 3x3 da própria face em 90 graus
-void gira_face_90_graus(int f, int direcao) {
+void gira(int f, int direcao) {
     int temp[3][3];
     for (int l = 0; l < 3; l++) {
         for (int c = 0; c < 3; c++) {
             if (direcao == HORARIO) temp[c][2 - l] = cubo[f][l][c];
-            else                    temp[2 - c][l] = cubo[f][l][c];
+            else                   temp[2 - c][l] = cubo[f][l][c];
         }
     }
     for (int l = 0; l < 3; l++) {
@@ -55,9 +60,11 @@ void gira_face_90_graus(int f, int direcao) {
         }
     }
 }
+
+
 void rotacao(int face, int direcao) {
     // 1. Gira a face 3x3
-    gira_face_90_graus(face, direcao);
+    gira(face, direcao);
 
     // 2. Gira as faixas adjacentes
     int temp[3];
