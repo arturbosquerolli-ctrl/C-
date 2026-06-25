@@ -1,4 +1,4 @@
-// Arquivo: cubo.h
+//Arquivo: cubo.h
 #ifndef CUBO_H
 #define CUBO_H
 
@@ -22,6 +22,6 @@ int cubo_esta_resolvido();
 void imprime_cubo();
 
 // INTERFACE GRÁFIC
-void executa_animacao(int total_passos, int* seq_face, int* seq_dir);
+void executaAnimacao(int total_passos, int* seq_face, int* seq_dir);
 
 #endif
