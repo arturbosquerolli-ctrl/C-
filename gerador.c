@@ -5,7 +5,7 @@
 #include "cubo.h"
 
 
-// Espera 3 coisas: ./gerador, a quantidade de movimentos e o nome do arquivo
+// Espera 2 coisas: ./gerador, a quantidade de movimentos e o nome do arquivo
 int main(int argc, char** argv) {
     if (argc != 2) {
         printf("./gerador <quantidade_de_arquivos>\n");
