@@ -43,7 +43,7 @@ void mostra_cubo_ncurses() {
 }
 
 // Orquestrador da animação
-void executa_animacao(int total_passos, int* seq_face, int* seq_dir) {
+void executaAnimacao(int total_passos, int* seq_face, int* seq_dir) {
     inicia_ncurses();
 
     mvprintw(0, 0, "CUBO CARREGADO: Pressione qualquer tecla para iniciar a animacao...");
