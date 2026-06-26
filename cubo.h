@@ -6,6 +6,7 @@
 enum Cores { AMARELO, VERDE, VERMELHO, LARANJA, BRANCO, AZUL };
 enum Face { CIMA, BAIXO, ESQUERDA, DIREITA, FRENTE, TRAS };
 enum Direcao { HORARIO, ANTIHORARIO };
+enum Rotacao { NORTE, SUL, LESTE, OESTE };
 
 // VARIÁVEIS GLOBAIS 
 extern int cubo[6][3][3];
@@ -15,13 +16,13 @@ extern const char* nome_faces[6];
 extern const char* nome_direcoes[2];
 extern const char letras_cores[6];
 
-// FUNÇÕES
-void inicializa_cubo_resolvido();
+// FUNÇÕES (Padronizadas para não dar erro de compilação com os outros arquivos)
+void inicializaCuboResolvido();
 void rotacao(int face, int direcao);
-int cubo_esta_resolvido();
-void imprime_cubo();
+int cuboEstaResolvido();
+void imprimeCubo();
 
-// INTERFACE GRÁFIC
+// INTERFACE GRÁFICA
 void executaAnimacao(int total_passos, int* seq_face, int* seq_dir);
 
 #endif
