@@ -164,5 +164,3 @@ void rotacao(int face, int direcao) {
         }
     }
 }
-
-//Tem que passar para variavel temporária para não perder o valor anterior!!!!
