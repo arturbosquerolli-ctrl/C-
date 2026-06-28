@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
     imprimeCubo();
 
     int seq_face[20], seq_dir[20];
-    int limite = 6; // máximo de busca
+    int limite = 12; // máximo de busca
     int resolvido = 0;
     int total_passos = 0;
 
