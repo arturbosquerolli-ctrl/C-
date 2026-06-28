@@ -35,13 +35,17 @@ int cuboEstaResolvido() {
 
 
 void imprimeCubo() {
-    // Função de debug simplificada
-    printf("Face CIMA:\n");
-    for(int l=0; l<3; l++) {
-        for(int c=0; c<3; c++) printf("%c ", letras_cores[cubo[CIMA][l][c]]);
+    for (int f = 0; f < 6; f++) {
+        printf("Face %s:\n", nome_faces[f]);
+        for(int l = 0; l < 3; l++) {
+            for(int c = 0; c < 3; c++) {
+                // Imprime a cor correspondente ao valor na matriz 3D
+                printf("%c ", letras_cores[cubo[f][l][c]]);
+            }
+            printf("\n");
+        }
         printf("\n");
     }
-    printf("\n");
 }
 
 
