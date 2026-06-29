@@ -1,4 +1,4 @@
-// Arquiv SOLUÇÃO DO CUBO
+// Arquivo SOLUÇÃO DO CUBO
 #include <stdio.h>
 #include <stdlib.h>
 #include "cubo.h"
